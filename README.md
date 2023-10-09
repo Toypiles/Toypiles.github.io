@@ -692,5 +692,91 @@ BusyBox를 빌드하기 전에 설정을 구성해야 합니다. 다음 명령�
 BusyBox를 사용할 준비가 끝났고 필요한 명령어를 실행하려면 BusyBox를 활성화하고 실행 파일을 사용하면 됨.
 
 이제 BusyBox를 빌드하고 사용할 수 있다. 이 과정은 BusyBox를 커스터마이징하고 리눅스 시스템에서 사용하는 일반적인 방법이다. BusyBox 설정 단계에서 원하는 기능을 활성화 또는 비활성화하여 필요에 맞게 빌드할 수 있다.
+<br> <br>
+<p><li>roofts 디렉토리 생성</li></p>
+1. 필요한 도구 설치:
+먼저 **`debootstrap`** 패키지를 설치해야 합니다. 다음 명령을 사용하여 설치할 수 있다.
+    
+    ```bash
+    bashCopy code
+    sudo apt-get install debootstrap
+    
+    ```
+    
+2. rootfs 디렉토리 생성:
+rootfs 이미지를 만들기 위한 디렉토리를 생성한다.
+    
+    ```bash
+    bashCopy code
+    mkdir my_rootfs
+    
+    ```
+    
+3. 기본 파일 시스템 구성:
+**`debootstrap`** 명령을 사용하여 Debian 계열의 기본 파일 시스템을 생성한다.
+    
+    ```bash
+    bashCopy code
+    sudo debootstrap --arch=amd64 buster my_rootfs http://deb.debian.org/debian
+    
+    ```
+    
+    위 명령에서 "buster"는 Debian 10 (Buster)의 코드 이름입니다. 원하는 Debian 버전을 선택할 수 있다.
+    
+4. QEMU를 사용하여 실행:
+이제 QEMU를 사용하여 rootfs 이미지를 실행할 수 있다. QEMU를 설치하지 않았다면 먼저 설치해야 한다.
+    
+    ```bash
+    bashCopy code
+    sudo apt-get install qemu-system-x86
+    
+    ```
+    
+    그런 다음, 다음 명령으로 QEMU를 사용하여 rootfs 이미지 실행
+    
+    ```bash
+    bashCopy code
+    qemu-system-x86_64 -m 512M -hda my_rootfs -netdev user,id=network0 -device e1000,netdev=network0
+    
+    ```
+    
+    이 명령은 512MB RAM을 할당하고, **`my_rootfs`**를 하드 디스크로 사용하며, 가상 네트워크를 설정한다.
+    
 
+이제 QEMU가 rootfs 이미지를 실행하고 가상 머신을 시작한다. 이를 통해 생성한 root 파일 시스템을 테스트하고 필요한 패키지 및 설정을 추가할 수 있다.
+
+---
+
+1. 루트 파일 시스템 준비:
+루트 파일 시스템은 커널 이미지와는 별도로 관리된다. 필요한 경우 새로운 루트 파일 시스템을 생성하거나 기존의 루트 파일 시스템을 사용한다. 이전 답변에서 설명한 방법을 사용하여 루트 파일 시스템을 구성한다.
+2. 루트 파일 시스템 디렉토리 마운트:
+루트 파일 시스템을 임시로 마운트하고, 필요한 파일과 설정을 추가한다.
+    
+    ```bash
+    bashCopy code
+    sudo mount /dev/sdX /mnt  # 여기서 /dev/sdX는 루트 파일 시스템 장치를 가리킨다.
+    sudo cp -a [루트 파일 시스템 파일 및 설정] /mnt
+    sudo umount /mnt
+    
+    ```
+    
+3. rootfs 이미지 파일 생성:
+마운트한 루트 파일 시스템을 사용하여 **`rootfs.img`** 파일을 생성한다. 이렇게 하려면 다음 명령을 사용한다.
+    
+    ```bash
+    bashCopy code
+    dd if=/dev/zero of=rootfs.img bs=1M count=[이미지 크기(MB)]
+    mkfs.ext4 rootfs.img
+    sudo mount rootfs.img /mnt
+    sudo cp -a [루트 파일 시스템 파일 및 설정] /mnt
+    sudo umount /mnt
+    
+    ```
+    
+    **`[이미지 크기(MB)]`**를 원하는 이미지 크기로 대체하고, **`[루트 파일 시스템 파일 및 설정]`**을 실제로 루트 파일 시스템의 파일과 설정으로 대체한다.
+    
+4. rootfs 이미지 사용:
+이제 생성한 **`rootfs.img`** 파일을 사용할 수 있다. 필요한 장치에 복사하거나 QEMU 등을 사용하여 실행할 수 있다.
+
+이렇게 하면 **`vmlinux`**와 **`bzImage`** 파일을 사용하여 루트 파일 시스템과 함께 **`rootfs.img`**를 생성하고 사용할 수 있다. 이러한 작업은 커널과 루트 파일 시스템이 분리되어 있는 일반적인 시스템에서 사용되며, 커널 이미지와 루트 파일 시스템을 하나의 이미지로 통합하려면 다른 방식을 고려해야 한다.
 </ol>
