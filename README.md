@@ -827,6 +827,27 @@ virtualbox extension pack 다운 이후 장치에서 게스트 확장 이미지 
 qemu 다운을 진행하고 위의 qemu를 진행할 때의 문제점과 해결 방안을 통해 문제를 진행함 이후 make를 통해 qemu를 만들었다.
 
 busybox-1.31.1tar.bz2 - 위에 busybox 설정을 참고
+make defconfig
+make menuconfig
+
+setting → —Build Options 에서 Build static binary 체크
+qemu로 리눅스 커널을 올릴때, 디폴트 라이브러리들이 없으므로, 모두 static으로 라이브러리를 빌드되게 하는 옵션이다. 따라서 qemu에서 실행시킬 바이너리들을 빌드할땐 gcc - static 옵션을 무조건 붙여야한다.
+menuconfig 화면을 나오면, .config 파일에 CONFIG_STATIC=y 가 설정되어 있는것을 볼수있다.
+
+make busybos → 빌드
+mkdir _install
+make CONFIG_PREFIX =_install install
+~/Desktop/kernel_study/for_qemu/for_busybox/busybox-1.31.1
+$ cd _install 
+~/Desktop/kernel_study/for_qemu/for_busybox/busybox-1.31.0/_install 
+$ ls
+bin  linuxrc  sbin  user
+이렇게 나오면 정상적인 빌드가 완료된것이다. 이제 위 4개의 디렉토리를 묶어서 rootfs를 만들기 전에 여기서 공부한 커널 모듈을 디버깅하기 위해 요 안에 아래의 코드를 빌드해서 넣어보자.
+chardev.c
+makefile
+find . | cpio -H newc -o | gzip > rootfs.img.gz
+cpio는 파일 시스템 압축을 위한 명령어라고 보면 된다. 위 명령어를 치면 rootfs.img.gz가 생성되고, 이게 바로 rootfs이다.
+여기서 gz는 오류가 진행되서 gz는 빼고 진행하였다.
 
 linux-6.0.tar.gz - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git의 홈페이지에 v6.0을 통해 링크를 복사하고 wget명령을 사용해 터미널에서 사용
 
@@ -853,17 +874,17 @@ kernel hacking → KGDB: kernel debugger 체크
 
 make → 커널 빌드
 makefile을 보면 .config 파일을 참조하여 커널을 빌드하게끔 되어있다. 여기서 나는 gcc 관련 에러가 나와서 기존 gcc 버전을 7에서 6으로 낮추니까 됐다. 빌드에 성공하면 커널이미지 파일이 arch/x86/boot 하위에 bzimage 이름으로 생긴다.
-╭─wogh8732@ubuntu ~/Desktop/kernel_study/for_qemu/linux/arch/x86/boot ‹523d939ef98f*› 
-╰─$ file bzImage 
+~/Desktop/kernel_study/for_qemu/linux/arch/x86/boot ‹523d939ef98f*› 
+$ file bzImage 
 bzImage: Linux kernel x86 boot executable bzImage, version 4.7.0+ (wogh8732@ubuntu) #
 
 이후에 커널 실행 <br>
 qemu-system-x86_64 \
         -m 2G \
-        -smp 2 \
-        -kernel $1/arch/x86/boot/bzImage \
+        -smp 4 \
+        -kernel /home/linux-6.0/arch/x86_64/boot/bzImage \
         -append "console=ttyS0 root=/dev/sda earlyprintk=serial net.ifnames=0 nokaslr" \
-        -drive file=$2/stretch.img,format=raw \
+        -drive file=/home/linux-6.0/arch/x86_64/boot/stretch.img,format=raw \
         -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 \
         -net nic,model=e1000 \
         -enable-kvm \
@@ -871,8 +892,10 @@ qemu-system-x86_64 \
         -pidfile vm.pid \
         2>&1 | tee vm.log
         이 코드를 실재 root.sh에 넣으면 된다.
-
+        
 roots.iso 
+ISO를 만드는 명령어를 입력한다. mkisofs -o destination-filename.iso /home/username/folder-name을 입력하고, "destination-filename" 에는 원하는 ISO 파일 이름을 넣고, "folder-name" 은 ISO 파일이 저장되는 폴더로, 원하는 폴더 이름을 넣으면 된다.
+mkisofs -o roots.iso /home/username/qemu를 통해 만들었다.
 
 vm.log 
 wm.pid 
@@ -905,7 +928,7 @@ Remote debugging using localhost:1234
 
 (gdb) c
 
----
+->
 
 Continuing.
 
