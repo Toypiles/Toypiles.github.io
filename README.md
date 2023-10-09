@@ -602,9 +602,95 @@ dest에 iso 파일 설정
 
 스크립트 파일 생성
 
+스크립트 명령어
+
+https://rhrhth23.tistory.com/147
+
 root.sh
 
 https://rhrhth23.tistory.com/20
 
+<li>BusyBox</li>
+.cpio를 만들고 img를 hda로 잡아서 만들어봄 하지만 적용이 안됨
+busy box로 img를 만들어서 hda로 잡아서 만들어봄 이것 또한 적용 중간에 진행이 안됨.
+BusyBox를 빌드하는 과정은 일반적으로 리눅스 시스템에서 다음과 같이 수행됩니다.
+
+1. 필요한 도구 설치:
+BusyBox를 빌드하려면 빌드 도구와 컴파일러가 필요합니다. 일반적으로 'gcc'와 'make'를 포함한 개발 도구를 설치해야 합니다. 아래 명령어를 사용하여 필요한 도구를 설치
+    
+    ```bash
+    bashCopy code
+    sudo apt-get install build-essential
+    
+    ```
+    
+    또한 BusyBox를 빌드하는 데 필요한 다른 종속성에 따라 추가 패키지가 필요할 수 있다.
+    
+2. BusyBox 소스 코드 다운로드:
+BusyBox 소스 코드를 공식 웹사이트나 Git 저장소에서 다운로드합니다. 예를 들어, 공식 웹사이트에서 소스 코드를 다운로드하려면 다음과 같이 실행한다.
+    
+    ```bash
+    bashCopy code
+    wget https://busybox.net/downloads/busybox-x.y.z.tar.bz2
+    
+    ```
+    
+    'x.y.z'는 BusyBox의 버전 번호에 해당한다.
+    
+3. 압축 해제:
+다운로드한 소스 코드를 압축 해제
+    
+    ```bash
+    bashCopy code
+    tar -xjf busybox-x.y.z.tar.bz2
+    
+    ```
+    
+4. 빌드 디렉토리로 이동:
+압축 해제한 디렉토리로 이동
+    
+    ```bash
+    bashCopy code
+    cd busybox-x.y.z
+    
+    ```
+    
+5. BusyBox 설정:
+BusyBox를 빌드하기 전에 설정을 구성해야 합니다. 다음 명령어를 실행하여 설정을 시작
+    
+    ```bash
+    bashCopy code
+    make menuconfig
+    
+    ```
+    
+    이 명령어는 BusyBox 빌드 구성을 위한 대화형 메뉴를 열고, 여기서 필요한 옵션을 선택하고 설정을 마침
+    
+6. BusyBox 빌드:
+설정이 완료되면 다음 명령어를 사용하여 BusyBox를 빌드
+    
+    ```bash
+    bashCopy code
+    make
+    
+    ```
+    
+    이 명령어는 BusyBox를 컴파일하고 실행 파일을 생성
+    
+7. BusyBox 실행 파일 복사:
+빌드된 BusyBox 실행 파일을 원하는 위치로 복사한다. 예를 들어, '/bin/busybox'와 같은 경로로 복사할 수 있다.
+    
+    ```bash
+    bashCopy code
+    cp busybox /bin/busybox
+    
+    ```
+    
+    필요에 따라 실행 파일 이름을 변경하거나 경로를 조정할 수 있다.
+    
+8. BusyBox 사용:
+BusyBox를 사용할 준비가 끝났고 필요한 명령어를 실행하려면 BusyBox를 활성화하고 실행 파일을 사용하면 됨.
+
+이제 BusyBox를 빌드하고 사용할 수 있다. 이 과정은 BusyBox를 커스터마이징하고 리눅스 시스템에서 사용하는 일반적인 방법이다. BusyBox 설정 단계에서 원하는 기능을 활성화 또는 비활성화하여 필요에 맞게 빌드할 수 있다.
 
 </ol>
