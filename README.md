@@ -832,7 +832,45 @@ linux-6.0.tar.gz - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu
 
 root.sh 리눅스 실행파일 touch root.sh, 실행권한 부여 chmod 755 root.sh, 쉘 확인 echo $SHELL 이후 쉘을 선언하기 위해 vi root.sh를 사용했다. vi를 통해 들어간 쉘 안에서는 i가 input을 할 수 있는 것이고, x가 지우는 것 esc를 통해 저장을 할 수 있고 이후에 esc shift :wq를 통해 나갈 수 있다.
 
-rootfs.img 
+rootfs.img : 커널에 대한 이미지 만들기 <br>
+명령어는 <br>
+sudo apt-get install debootstrap<br>
+mkdir image && cd image<br>
+wget https://raw.githubusercontent.com/google/syzkaller/master/tools/create-image.sh -O create-image.sh<br>
+chmod +x create-image.sh<br>
+./create-image.sh<br>
+
+make defconfig
+각 arch 마다 기본 config 가 존재하는데, 이것이 바로 defconfig 파일이다.
+arch/x86/configs/*   --> x86 기반 arch 의 defconfig 파일들 모음.
+arch/arm/configs/*  --> arm 기반 arch 의 defconfig 파일들 모음.
+make meuconfig
+
+kernel hacking → Compile-time checks and compiler options → 맨위에꺼 체크
+
+kernel hacking → KGDB: kernel debugger 체크
+위 옵션들을 체크하고 저장하고 나오면 체크한 설정들을 기반으로 .config 파일이 생성된다.
+
+make → 커널 빌드
+makefile을 보면 .config 파일을 참조하여 커널을 빌드하게끔 되어있다. 여기서 나는 gcc 관련 에러가 나와서 기존 gcc 버전을 7에서 6으로 낮추니까 됐다. 빌드에 성공하면 커널이미지 파일이 arch/x86/boot 하위에 bzimage 이름으로 생긴다.
+╭─wogh8732@ubuntu ~/Desktop/kernel_study/for_qemu/linux/arch/x86/boot ‹523d939ef98f*› 
+╰─$ file bzImage 
+bzImage: Linux kernel x86 boot executable bzImage, version 4.7.0+ (wogh8732@ubuntu) #
+
+이후에 커널 실행 <br>
+qemu-system-x86_64 \
+        -m 2G \
+        -smp 2 \
+        -kernel $1/arch/x86/boot/bzImage \
+        -append "console=ttyS0 root=/dev/sda earlyprintk=serial net.ifnames=0 nokaslr" \
+        -drive file=$2/stretch.img,format=raw \
+        -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 \
+        -net nic,model=e1000 \
+        -enable-kvm \
+        -nographic \
+        -pidfile vm.pid \
+        2>&1 | tee vm.log
+        이 코드를 실재 root.sh에 넣으면 된다.
 
 roots.iso 
 
@@ -867,10 +905,12 @@ Remote debugging using localhost:1234
 
 (gdb) c
 
+---
+
 Continuing.
 
 end Kernel panic - not syncing: VFS: Unable to mount root f-
 
-
+까지 진행했습니다.
 
 </ol>
