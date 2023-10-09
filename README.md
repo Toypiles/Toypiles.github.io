@@ -1,8 +1,6 @@
 # Toypiles.github.io
 Debug 
 <ol>
-<p>A. 시작하기 앞서 정리한 용어들</p> <br>
-
 <p><li>리눅스 명령어 -vm</li></p>
 
 pwd : 현재 작업중인 디렉토리 정보 출력
@@ -90,9 +88,9 @@ critical section : 자원 공유의 문제가 발생하는 걸 방지하기 위�
     
     spin lock이 기간이 길어지게되면 오버헤드가 많아진다.
     
-    TestAndSet 인자를 통해 진입여부를 확인하는데 이 인자는 CPU atomic 명령어이다.
+    TestAndSet 인자를 통해 진입여부를 확인하는데 이 인자는 CPU atomic 명령어다.
     
-    - 실행 중간에 간섭받거나 중단되지 않는다
+    - 실행 중간에 간섭받거나 중단되지 않음
     - 같은 메모리 영역에 대해 동시에 실행되지 않는다.
     
     위의 이유로 동시에 접근되는 문제는 걱정할 필요가 없다.
@@ -167,7 +165,12 @@ ref
 - [https://velog.io/@dodozee/OS-메모리-영역-코드-영역-데이터-영역-힙-영역-스택-영역-대해서feat.스레드](https://velog.io/@dodozee/OS-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%98%81%EC%97%AD-%EC%BD%94%EB%93%9C-%EC%98%81%EC%97%AD-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%98%81%EC%97%AD-%ED%9E%99-%EC%98%81%EC%97%AD-%EC%8A%A4%ED%83%9D-%EC%98%81%EC%97%AD-%EB%8C%80%ED%95%B4%EC%84%9Cfeat.%EC%8A%A4%EB%A0%88%EB%93%9C)
 - https://web.mit.edu/6.005/www/fa15/classes/20-thread-safety/#strategy_1_confinement
 - https://web.mit.edu/6.005/www/fa15/classes/23-locks/
-- https://docs.kernel.org/dev-tools/kasan.html  <br> <br>
+- https://docs.kernel.org/dev-tools/kasan.html
+-https://blog.k3170makan.com/2020/11/linux-kernel-exploitation-0x0-debugging.html
+-https://vccolombo.github.io/cybersecurity/linux-kernel-qemu-setup/
+-https://dev.to/alexeyden/quick-qemu-setup-for-linux-kernel-module-debugging-2nde
+-https://jeongzero.oopy.io/73084e52-54fa-43e2-986b-072ee2a4f80d
+ <br> <br>
 
 <p><li>qemu를 진행할때의 방법과 만날 수 있는 문제점들</li></p>  <br>
 
@@ -481,4 +484,127 @@ disass start_kernel
 tui enable
 
 make kvm_guest.config 해야함
+<br> <br>
+<li>CLI,GUI</li>
+CLI 란 ?
+
+▷ Command Line Interface
+
+▷ 명령어를 줄로 입력하여 소통(상호 작용)한다 라는 뜻을 가진다.
+
+▷ 운영체제안에 있는 쉘이 가지고 있는 특정 명령어를 통해 운영체제를 컨트롤 한다.
+
+▷ 윈도우에 'cmd' 나 리눅스에 '터미널'이 대표적이다.
+
+▷ 키보드 + 명령어 사용 가능
+
+TUI 란 ?
+
+▷ Text User Interface
+
+▷ 글로 사용자가 소통(상호 작용)을 한다 라는 뜻을 가진다.
+
+▷ 리눅스 안에 'vi(vim) 편집기'가 대표적이다.
+
+▷ CLI와 비슷하지만 다릅니다. 명령어를 사용해도 전혀 안된다.
+
+메모장과 비슷합니다. 메모장과 다른점은 키보드로만 컨트롤 할 수 있다.
+
+▷ 키보드만 사용 가능
+
+GUI 란?
+
+▷ Graphic User Interface
+
+▷ 그래픽으로 사용자가 소통(상호 작용)을 한다 라는 뜻을 가진다.
+
+▷ 키보드 + 마우스 모두 사용 가능
+
+▷ 한 눈에 보이고 제일 편하다.
+
+※ 제일 편한데 왜 GUI를 리눅스에서는 잘 쓰지 않을까 ? 리눅스를 왜 쓸까 ?
+
+- 보통 리눅스를 서버용으로 CLI환경을 많이 사용한다.
+
+그래픽으로 사용하면 자원을 많이 잡아먹어 부하가 많이 걸리기 때문이다.
+
+- 실제 회사에서 리눅스가 서버로도 좋지만 무료이기 때문에 많이 사용한다.
+
+- 리눅스가 윈도우에 비해 되게 가볍고, 빠르고, 안정성이 높다고 한다.
+
+CLI → GUI 로 바꾸는 법
+
+이 방법은 나중에 인터넷에서 다운로드를 받거나 할 때 불편한 상황에서 간단하게 바꿔
+
+사용하기 위해 사용하시는 사람들이 있다.
+
+하기 전 알아야 할 용어
+
+런 레벨 (Run Level) : init 데몬에 의해 수행하게 되는 시스템 설정 모드
+
+- init 0 : 시스템 종료
+- init 1 : 단일 사용자 모드
+- init 2 : 네트워크 지원 X, 다중 사용자 모드
+- init 3 : 네트워크 지원 O, 다중 사용자 모드 = TUI
+- init 4 : 사용자 지정 레벨 (사용하지 않는 레벨)
+- init 5 : X-window 사용하는 다중 사용자 모드 = GUI
+- init 6 : 시스템 재부팅 = reboot
+
+※ X-window는 네트워크를 기반으로 하는 그래픽 사용자 인터페이스, GUI를 말함
+
+이제 CLI에서 GUI로 바꾼다.
+
+사용자는 root로 하시면 된다.
+
+① **# yum -y groupinstall "GNOME Desktop" "Graphical Administration Tools"**
+
+!https://blog.kakaocdn.net/dn/PyN4y/btqNMMGx0xc/5uEa0eKKmCK8yF77G2upq0/img.jpg
+
+명령어로 -y로 설치 모두 yes선택, groupinstall로 그룹에 있는 모든 패키지를 다운
+
+무료 오픈 소스 데스크톱 GUI환경 패키지 + 그래픽 관리 도구 패키지 다운
+
+(설치 하는데 시간이 5분 정도 걸립니다.)
+
+② 설치가 완료되면 Complete! 라는 문구가 뜬다.
+
+!https://blog.kakaocdn.net/dn/MlZSm/btqNLQimt0u/d43CcodEEpHKGkZhSzej1K/img.jpg
+
+③  **# ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/default.target**
+
+!https://blog.kakaocdn.net/dn/bArBVW/btqNJwY1eKo/iRUaBqch3m7PVmfowMFAT0/img.jpg
+
+ln 파일 링크를 생성
+
+- s는 링크할 원본이 심볼릭 링크된 파일이면 그 파일을 링크
+- f는 링크 생성할 대상 파일이 있어도 강제로 새로운 링크 생성
+
+이 명령어로 그래픽 모드인 런레벨5를 default(기본)으로 변경
+
+④ 이제 런레벨이 그래픽 모드로 잘 변경되었는지 확인
+
+**# systemctl get-default** 명령어로 기본 설정되어있는 모드를 확인
+
+graphical.target으로 바뀌는것 확인
+
+!https://blog.kakaocdn.net/dn/C7JQx/btqNLQJqCMH/qEFvm3NIgrBfeeszR5bkv0/img.jpg
+
+⑤ 이제 재부팅하면 CLI에서 GUI로 바뀐다.
+
+**# reboot** 또 는 **# init 6** 적용
+<br> <br>
+<li>iso 파일 추출</li>
+https://www.makeuseof.com/tag/extract-iso-files-linux/
+
+[https://ko.wikihow.com/리눅스에서-ISO-파일-만드는-방법](https://ko.wikihow.com/%EB%A6%AC%EB%88%85%EC%8A%A4%EC%97%90%EC%84%9C-ISO-%ED%8C%8C%EC%9D%BC-%EB%A7%8C%EB%93%9C%EB%8A%94-%EB%B0%A9%EB%B2%95)
+
+dest에 iso 파일 설정
+
+스크립트 파일 생성
+
+root.sh
+
+https://rhrhth23.tistory.com/20
+
+
 </ol>
