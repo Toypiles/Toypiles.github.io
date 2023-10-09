@@ -676,9 +676,13 @@ BusyBox를 빌드하기 전에 설정을 구성해야 합니다. 다음 명령�
     ```
     
     이 명령어는 BusyBox를 컴파일하고 실행 파일을 생성
-    
+
 7. BusyBox 실행 파일 복사:
-빌드된 BusyBox 실행 파일을 원하는 위치로 복사한다. 예를 들어, '/bin/busybox'와 같은 경로로 복사할 수 있다.
+
+빌드된 BusyBox 실행 파일을 원하는 위치로 복사한다.
+
+예를 들어, '/bin/busybox'와 같은 경로로 복사할 수 있다.
+
     
     ```bash
     bashCopy code
@@ -688,7 +692,7 @@ BusyBox를 빌드하기 전에 설정을 구성해야 합니다. 다음 명령�
     
     필요에 따라 실행 파일 이름을 변경하거나 경로를 조정할 수 있다.
     
-8. BusyBox 사용:
+9. BusyBox 사용:
 BusyBox를 사용할 준비가 끝났고 필요한 명령어를 실행하려면 BusyBox를 활성화하고 실행 파일을 사용하면 됨.
 
 이제 BusyBox를 빌드하고 사용할 수 있다. 이 과정은 BusyBox를 커스터마이징하고 리눅스 시스템에서 사용하는 일반적인 방법이다. BusyBox 설정 단계에서 원하는 기능을 활성화 또는 비활성화하여 필요에 맞게 빌드할 수 있다.
@@ -774,11 +778,15 @@ rootfs 이미지를 만들기 위한 디렉토리를 생성한다.
     ```
     
     **`[이미지 크기(MB)]`**를 원하는 이미지 크기로 대체하고, **`[루트 파일 시스템 파일 및 설정]`**을 실제로 루트 파일 시스템의 파일과 설정으로 대체한다.
+
     
 4. rootfs 이미지 사용:
 이제 생성한 **`rootfs.img`** 파일을 사용할 수 있다. 필요한 장치에 복사하거나 QEMU 등을 사용하여 실행할 수 있다.
 
-이렇게 하면 **`vmlinux`**와 **`bzImage`** 파일을 사용하여 루트 파일 시스템과 함께 **`rootfs.img`**를 생성하고 사용할 수 있다. 이러한 작업은 커널과 루트 파일 시스템이 분리되어 있는 일반적인 시스템에서 사용되며, 커널 이미지와 루트 파일 시스템을 하나의 이미지로 통합하려면 다른 방식을 고려해야 한다.
+이렇게 하면 **`vmlinux`**와 **`bzImage`** 파일을 사용하여 루트 파일 시스템과 함께 **`rootfs.img`**를 생성하고 사용할 수 있다. 
+
+이러한 작업은 커널과 루트 파일 시스템이 분리되어 있는 일반적인 시스템에서 사용되며, 커널 이미지와 루트 파일 시스템을 하나의 이미지로 통합하려면 다른 방식을 고려해야 한다.
+
 <br> <br>
 
 <p><li>전반적으로 구상해야 할 것을 정리</li></p>
@@ -797,6 +805,7 @@ qemu sysytem을 바탕으로 캠핑장을 간다고 생각해라
 ---
 
 vm를 구성할 때  필요한 것 vm 프로그램, 원하는 리눅스 버전을 포함하는 커널을 포함하는 iso이미지 파일이 필요하다.
+
 ram이나 다른 요소들을 포함한다. 이러한 과정들을 리눅스 안에서 한번 더 한다고 생각을 해라. 
 
 리눅스에서는 gui를 쓰는 것을 많이 제안한다. cli를 쓰게 만들 껀데, 우리에게는 vm이 필요한데 vm은 케뮤가 필요하다. 
@@ -827,31 +836,50 @@ virtualbox extension pack 다운 이후 장치에서 게스트 확장 이미지 
 qemu 다운을 진행하고 위의 qemu를 진행할 때의 문제점과 해결 방안을 통해 문제를 진행함 이후 make를 통해 qemu를 만들었다.
 
 busybox-1.31.1tar.bz2 - 위에 busybox 설정을 참고
+
 make defconfig
+
 make menuconfig
 
 setting → —Build Options 에서 Build static binary 체크
+
 qemu로 리눅스 커널을 올릴때, 디폴트 라이브러리들이 없으므로, 모두 static으로 라이브러리를 빌드되게 하는 옵션이다. 따라서 qemu에서 실행시킬 바이너리들을 빌드할땐 gcc - static 옵션을 무조건 붙여야한다.
+
 menuconfig 화면을 나오면, .config 파일에 CONFIG_STATIC=y 가 설정되어 있는것을 볼수있다.
 
 make busybos → 빌드
+
 mkdir _install
+
 make CONFIG_PREFIX =_install install
+
 ~/Desktop/kernel_study/for_qemu/for_busybox/busybox-1.31.1
+
 $ cd _install 
+
 ~/Desktop/kernel_study/for_qemu/for_busybox/busybox-1.31.0/_install 
+
 $ ls
+
 bin  linuxrc  sbin  user
+
 이렇게 나오면 정상적인 빌드가 완료된것이다. 이제 위 4개의 디렉토리를 묶어서 rootfs를 만들기 전에 여기서 공부한 커널 모듈을 디버깅하기 위해 요 안에 아래의 코드를 빌드해서 넣어보자.
+
 chardev.c
+
 makefile
+
 find . | cpio -H newc -o | gzip > rootfs.img.gz
+
 cpio는 파일 시스템 압축을 위한 명령어라고 보면 된다. 위 명령어를 치면 rootfs.img.gz가 생성되고, 이게 바로 rootfs이다.
+
 여기서 gz는 오류가 진행되서 gz는 빼고 진행하였다.
 
 linux-6.0.tar.gz - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git의 홈페이지에 v6.0을 통해 링크를 복사하고 wget명령을 사용해 터미널에서 사용
 
-root.sh 리눅스 실행파일 touch root.sh, 실행권한 부여 chmod 755 root.sh, 쉘 확인 echo $SHELL 이후 쉘을 선언하기 위해 vi root.sh를 사용했다. vi를 통해 들어간 쉘 안에서는 i가 input을 할 수 있는 것이고, x가 지우는 것 esc를 통해 저장을 할 수 있고 이후에 esc shift :wq를 통해 나갈 수 있다.
+root.sh 리눅스 실행파일 touch root.sh, 실행권한 부여 chmod 755 root.sh, 쉘 확인 echo $SHELL 이후 쉘을 선언하기 위해 vi root.sh를 사용했다.
+
+vi를 통해 들어간 쉘 안에서는 i가 input을 할 수 있는 것이고, x가 지우는 것 esc를 통해 저장을 할 수 있고 이후에 esc shift :wq를 통해 나갈 수 있다.
 
 rootfs.img : 커널에 대한 이미지 만들기 <br>
 명령어는 <br>
@@ -862,9 +890,13 @@ chmod +x create-image.sh<br>
 ./create-image.sh<br>
 
 make defconfig
+
 각 arch 마다 기본 config 가 존재하는데, 이것이 바로 defconfig 파일이다.
+
 arch/x86/configs/*   --> x86 기반 arch 의 defconfig 파일들 모음.
+
 arch/arm/configs/*  --> arm 기반 arch 의 defconfig 파일들 모음.
+
 make meuconfig
 
 kernel hacking → Compile-time checks and compiler options → 맨위에꺼 체크
@@ -873,12 +905,17 @@ kernel hacking → KGDB: kernel debugger 체크
 위 옵션들을 체크하고 저장하고 나오면 체크한 설정들을 기반으로 .config 파일이 생성된다.
 
 make → 커널 빌드
+
 makefile을 보면 .config 파일을 참조하여 커널을 빌드하게끔 되어있다. 여기서 나는 gcc 관련 에러가 나와서 기존 gcc 버전을 7에서 6으로 낮추니까 됐다. 빌드에 성공하면 커널이미지 파일이 arch/x86/boot 하위에 bzimage 이름으로 생긴다.
+
 ~/Desktop/kernel_study/for_qemu/linux/arch/x86/boot ‹523d939ef98f*› 
+
 $ file bzImage 
+
 bzImage: Linux kernel x86 boot executable bzImage, version 4.7.0+ (wogh8732@ubuntu) #
 
 이후에 커널 실행 <br>
+
 qemu-system-x86_64 \
         -m 2G \
         -smp 4 \
@@ -894,7 +931,9 @@ qemu-system-x86_64 \
         이 코드를 실재 root.sh에 넣으면 된다.
         
 roots.iso 
+
 ISO를 만드는 명령어를 입력한다. mkisofs -o destination-filename.iso /home/username/folder-name을 입력하고, "destination-filename" 에는 원하는 ISO 파일 이름을 넣고, "folder-name" 은 ISO 파일이 저장되는 폴더로, 원하는 폴더 이름을 넣으면 된다.
+
 mkisofs -o roots.iso /home/username/qemu를 통해 만들었다.
 
 vm.log 
