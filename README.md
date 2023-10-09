@@ -800,4 +800,51 @@ vm를 구성할 때  필요한 것 vm 프로그램, 원하는 리눅스 버전�
 <br> <br>
 <p><li>ubuntu에서 실시한 것을 정리</li></p>
 
+oracle vm virtual box 설치
+ubuntu- 22.04 desktop.iso 디스크 이미지 다운
+virtualbox extension pack 다운 이후 장치에서 게스트 확장 이미지 삽입을 진행한후 터미널을 열고 autorun.sh를 찾아 ./autorun.sh를 진행
+이후 구글 드라이브에 있는 파일 4개를 firefox을 통해 다운
+qemu 다운을 진행하고 위의 qemu를 진행할 때의 문제점과 해결 방안을 통해 문제를 진행함
+이후 make를 통해 qemu를 만들었다.
+busybox-1.31.1tar.bz2 - 위에 busybox 설정을 참고
+
+linux-6.0.tar.gz - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git의 홈페이지에 v6.0을 통해 링크를 복사하고 wget명령을 사용해 터미널에서 사용
+root.sh 
+rootfs.img 
+roots.iso 
+vm.log 
+wm.pid 
+home/linux6.0/arch/x86_64/boot 파일 내에 bzImage와 stretch.img 파일 삽입
+han@han-VirtualBox:~/linux-6.0$ gdb -q ./vmlinux
+
+Reading symbols from ./vmlinux...
+
+(No debugging symbols found in ./vmlinux)
+
+(gdb) c
+
+The program is not being run.
+
+(gdb) b *start_kernel
+
+Breakpoint 1 at 0xffffffff82fbac19
+
+(gdb) target remote localhost:1234
+
+localhost:1234: Connection timed out.
+
+(gdb) target remote localhost:1234
+
+Remote debugging using localhost:1234
+
+0x0000000003611ff9 in ?? ()
+
+(gdb) c
+
+Continuing.
+
+end Kernel panic - not syncing: VFS: Unable to mount root f-
+
+
+
 </ol>
