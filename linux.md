@@ -25,7 +25,7 @@ VirtualBox 7.0.12 Software Developer Kit (SDK) <br>
 2. cpu개수 4개, Nested VT-x/AMD-V on, memory 4096MB, ext 40GB, video memory 48GB, 가상화 on -> start <br> <br>
 
 ## 3. qemu 설치과정
-qemu version : v6.2.0, linux version : v6.0.0 <br>
+* qemu version : v6.2.0, linux version : v6.0.0 <br> <br>
 $ sudo apt install libvirt-daemon <br>
 $ sudo apt install -y qemu qemu-kvm libvirt-daemon libvirt-clients bridge-utils virt-manager <br>
 $ sudo systemctl enable libvirtd <br>
@@ -86,9 +86,9 @@ $ chmod 755 root.sh <br>
 $ sudo ./root.sh을 진행하면 linux위에 리눅스가 build 된다. <br> <br>
 
 ## 5. gdb를 사용해 linux 위의 linux와 연결 
-home 파일에서 linux Terminal을 실행시킨 후에 명령어로 gdb vmlinux를 진행함 <br>
-target remote:1234를 통해 attach를 진행하였고 gdb와 linux를 attach 시키는데에 성공함. <br>
-gdb가 사용된 이유는 실행 파일 분석을 위해서이다. <br>
+* home 파일에서 linux Terminal을 실행시킨 후에 명령어로 gdb vmlinux를 진행함 <br>
+* target remote:1234를 통해 attach를 진행하였고 gdb와 linux를 attach 시키는데에 성공함. <br>
+* gdb가 사용된 이유는 실행 파일 분석을 위해서이다. <br>
 
 ## 6. 이번 과제에 사용된 파일과 용어 간략히 정리
 (1). 드라이브 파일 : bpf_2nd_primitive_PoC_230924_fin, bzImage, System.map, vmlinux <br> <br>
