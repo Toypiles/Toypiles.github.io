@@ -6,7 +6,7 @@
 3. qemu 설치과정
 4. 커널 이미지 빌드와 쉘 파일 작성 후 linux 위에 linux 실행
 5. gdb를 사용해 linux 위의 linux와 연결
-6. linux kernel에서 사용한 것 간략히 정리
+6. 이번 과제에 사용된 파일과 용어 간략히 정리
 7. 추후 진행할 것
 
 1. 환경 설정 (윈도우 10기준)
@@ -46,7 +46,7 @@ $ ./configure
 $ make
 
 (4). 커널 이미지 빌드와 쉘 파일 작성 후 linux 위에 linux 실행
-1. 커널 이미지 빌드
+* 1. 커널 이미지 빌드
 $ sudo apt-get install build-essential libncurses5 libncurses5-dev bin86 kernelpackage libssl-dev bison flex libelf-dev
 $ wget https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/snapshot/linux-6.0.tar.gz
 $ tar -xzvf linux-6.0.tar.gz
@@ -69,7 +69,7 @@ $ sudo mount -o loop stretch.img /mnt
 $ sudo cp -r /home/han/bpf_2nd_primitive_PoC_230924_fin /mnt
 $ sudo unmount /mnt
 
-2. 쉘 파일 작성 후 linux 위에 linux 실행
+* 2. 쉘 파일 작성 후 linux 위에 linux 실행
 쉘 파일 이름을 root.sh로 지정하고 사용함.
 $ vi root.sh
 qemu-system-x86_64 \
@@ -84,6 +84,34 @@ qemu-system-x86_64 \
   -s
 $ chmod 755 root.sh
 $ sudo ./root.sh을 진행하면 linux위에 리눅스가 build 된다.
+
+5. gdb를 사용해 linux 위의 linux와 연결
+home 파일에서 linux Terminal을 실행시킨 후에 명령어로 gdb vmlinux를 진행함
+target remote:1234를 통해 attach를 진행하였고 gdb와 linux를 attach 시키는데에 성공함.
+gdb가 사용된 이유는 실행 파일 분석을 위해서이다.
+
+6. 이번 과제에 사용된 파일과 용어 간략히 정리
+(1). 드라이브 파일 : bpf_2nd_primitive_PoC_230924_fin, bzImage, System.map, vmlinux
+(2). 주요 키워드 :
+1. Improper synchronization
+2. Improper locking
+3. Data race / Race condition
+4. Use-After-Free
+5. KCSAN
+6. KASAN
+(3). linux 위에 linux를 띄우기 위해 사용된 git: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+(4). 간략한 용어 정리
+qemu: rom에 저장된 ASUS처럼 부팅시켜주는 역할을 함 (emulation qemu)
+rootfs에는 root에 대한 파일 시스템이 저장되있는 것
+stretch.img안에도 똑같음
+BzImage : 리눅스 커널의 핵심
+vmlinux : 리눅스 커널의 구성요소 파일
+gdb:  실행파일 관찰도구
+.sh : 텍스트를 입력할 수 있는 쉘 파일
+img  파일 안에 pocfile → HDD역할(보조기억장치)
+
+7. 추후 진행할 것
 
 
 
