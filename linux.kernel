@@ -1,6 +1,6 @@
 # 윈도우에 리눅스를 설치하는 과정과, 리눅스 커널 위에 qemu 설치를 진행해서 boot 하는 방법
 
-순서
+## 순서
 1. 환경설정
 2. 윈도우에 리눅스 설치과정
 3. qemu 설치과정
@@ -9,11 +9,11 @@
 6. 이번 과제에 사용된 파일과 용어 간략히 정리
 7. 추후 진행할 것
 
-1. 환경 설정 (윈도우 10기준)
+## 1. 환경 설정 (윈도우 10기준)
 bios의 vt-d를 켜주고
 hyper-v를 꺼준다.
 
-2. 윈도우에 리눅스 설치과정
+## 2. 윈도우에 리눅스 설치과정
 (1). virtualbox를 통해 ubuntu 22.04를 다운받음
 https://www.virtualbox.org/wiki/Linux_Downloads
 (2). oracle vm virtualbox extension pack를 통해 확장팩을 다운받음
@@ -24,7 +24,7 @@ VirtualBox 7.0.12 Software Developer Kit (SDK)
 1. 다운받은 linux file (ubuntu-22.04.3-desktop-amd64.iso)를 삽입
 2. cpu개수 4개, Nested VT-x/AMD-V on, memory 4096MB, ext 40GB, video memory 48GB, 가상화 on -> start
 
-3. qemu 설치과정
+## 3. qemu 설치과정
 qemu version : v6.2.0, linux version : v6.0.0
 $ sudo apt install libvirt-daemon
 $ sudo apt install -y qemu qemu-kvm libvirt-daemon libvirt-clients bridge-utils virt-manager
@@ -45,7 +45,7 @@ $ sudo apt-get install bison
 $ ./configure
 $ make
 
-(4). 커널 이미지 빌드와 쉘 파일 작성 후 linux 위에 linux 실행
+## 4. 커널 이미지 빌드와 쉘 파일 작성 후 linux 위에 linux 실행
 * 1. 커널 이미지 빌드
 $ sudo apt-get install build-essential libncurses5 libncurses5-dev bin86 kernelpackage libssl-dev bison flex libelf-dev
 $ wget https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/snapshot/linux-6.0.tar.gz
@@ -85,12 +85,12 @@ qemu-system-x86_64 \
 $ chmod 755 root.sh
 $ sudo ./root.sh을 진행하면 linux위에 리눅스가 build 된다.
 
-5. gdb를 사용해 linux 위의 linux와 연결
+## 5. gdb를 사용해 linux 위의 linux와 연결
 home 파일에서 linux Terminal을 실행시킨 후에 명령어로 gdb vmlinux를 진행함
 target remote:1234를 통해 attach를 진행하였고 gdb와 linux를 attach 시키는데에 성공함.
 gdb가 사용된 이유는 실행 파일 분석을 위해서이다.
 
-6. 이번 과제에 사용된 파일과 용어 간략히 정리
+## 6. 이번 과제에 사용된 파일과 용어 간략히 정리
 (1). 드라이브 파일 : bpf_2nd_primitive_PoC_230924_fin, bzImage, System.map, vmlinux
 (2). 주요 키워드 :
 1. Improper synchronization
@@ -111,7 +111,7 @@ gdb:  실행파일 관찰도구
 .sh : 텍스트를 입력할 수 있는 쉘 파일
 img  파일 안에 pocfile → HDD역할(보조기억장치)
 
-7. 추후 진행할 것
+## 7. 추후 진행할 것
 ida 사용 : 일단 IDA는 디스어셈블러의 일종으로, 디스어셈블러는 바이너리 파일을 역으로 어셈블리어로 재구성해주는 툴
 IDA는 바이너리 >> 어셈블리어 >> 프로그래밍 언어 까지 변환시켜 준다.
 ida 설치 후 bpf_2nd_primitive_PoC_230924_fin 파일을 입력후에 ida에 들어간다.
