@@ -24,3 +24,23 @@ VirtualBox 7.0.12 Software Developer Kit (SDK)
 1. 다운받은 linux file (ubuntu-22.04.3-desktop-amd64.iso)를 삽입
 2. cpu개수 4개, Nested VT-x/AMD-V on, memory 4096MB, ext 40GB, 가상화 on -> start
 
+3. qemu 설치과정
+qemu version : v6.2.0, linux version : v6.0.0
+$ sudo apt install libvirt-daemon
+$ sudo apt install -y qemu qemu-kvm libvirt-daemon libvirt-clients bridge-utils virt-manager
+$ sudo systemctl enable libvirtd
+$ sudo systemctl start libvirtd
+$ sudo apt install git
+$ git clone https://gitlab.com/qemu-project/qemu.git
+$ cd qemu
+$ git submodule init
+$ git submodule update --recursive
+$ python -m ensurepip --upgrade # 해당 부분부터는 종속성 문제로 설치
+$ sudo apt-get install python3-sphinx
+$ pip install sphinx-rtd-theme
+$ sudo apt-get install ninja-build
+$ sudo apt-get install pkg-config
+$ sudo apt install flex
+$ sudo apt-get install bison # 해당 부분까지 종속성 문제로 설치
+$ ./configure
+$ make
