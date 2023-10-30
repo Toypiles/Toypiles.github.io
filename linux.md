@@ -93,12 +93,12 @@ gdb가 사용된 이유는 실행 파일 분석을 위해서이다. <br>
 ## 6. 이번 과제에 사용된 파일과 용어 간략히 정리
 (1). 드라이브 파일 : bpf_2nd_primitive_PoC_230924_fin, bzImage, System.map, vmlinux <br> <br>
 (2). 주요 키워드 : <br>
-1. Improper synchronization <br>
-2. Improper locking <br>
-3. Data race / Race condition <br>
-4. Use-After-Free <br>
-5. KCSAN <br>
-6. KASAN <br> <br>
+  1. Improper synchronization <br>
+  2. Improper locking <br>
+  3. Data race / Race condition <br>
+  4. Use-After-Free <br>
+  5. KCSAN <br>
+  6. KASAN <br> <br>
 (3). linux 위에 linux를 띄우기 위해 사용된 git:  <br>
 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git <br> <br>
 (4). 간략한 용어 정리 <br>
@@ -112,7 +112,7 @@ gdb:  실행파일 관찰도구 <br>
 img  파일 안에 pocfile → HDD역할(보조기억장치) <br> <br>
 
 ## 7. 추후 진행할 것
-ida 사용 : 일단 IDA는 디스어셈블러의 일종으로, 디스어셈블러는 바이너리 파일을 역으로 어셈블리어로 재구성해주는 툴  <br>
-IDA는 바이너리 >> 어셈블리어 >> 프로그래밍 언어 까지 변환시켜 준다. <br>
-ida 설치 후 bpf_2nd_primitive_PoC_230924_fin 파일을 입력후에 ida에 들어간다. <br>
-옆에 나와 있는 아무 목록에 들어가서 우클릭 후 main을 검색 한 후에 main 바탕으로 gdb와 비교 분석을 할 것이다. <br>
+* ida 사용 : 일단 IDA는 디스어셈블러의 일종으로, 디스어셈블러는 바이너리 파일을 역으로 어셈블리어로 재구성해주는 툴  <br>
+  IDA는 바이너리 >> 어셈블리어 >> 프로그래밍 언어 까지 변환시켜 준다. <br>
+  ida 설치 후 bpf_2nd_primitive_PoC_230924_fin 파일을 입력후에 ida에 들어간다. <br>
+  옆에 나와 있는 아무 목록에 들어가서 우클릭 후 main을 검색 한 후에 main 바탕으로 gdb와 비교 분석을 할 것이다. <br>
