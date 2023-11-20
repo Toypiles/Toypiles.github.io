@@ -7,7 +7,8 @@
 4. 커널 이미지 빌드와 쉘 파일 작성 후 linux 위에 linux 실행 <br>
 5. gdb를 사용해 linux 위의 linux와 연결 <br>
 6. 이번 과제에 사용된 파일과 용어 간략히 정리 <br>
-7. 추후 진행할 것 <br> <br>
+7. data race 방지 기법 및 커널 디버깅 <br>
+8. 발견된 data race <br> <br>
 
 ## 1. 환경 설정 (윈도우 10기준)
 bios의 vt-d를 켜주고 <br>
